@@ -2,7 +2,7 @@ import { COLORS } from "@novomarkt/constants/colors";
 import { Platform, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-	onceView: { flex: 1 },
+	onceView: { flex: 1, width: "100%" },
 	container: {
 		flex: 1,
 		backgroundColor: "#fff",

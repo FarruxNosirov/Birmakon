@@ -73,46 +73,18 @@ let requests = {
 				credentials
 			),
 
-		register: (credentials: RegisterState) =>
-			axios.post<
-				{ token: string; code: string },
-				AxiosResponse<{
-					data: { token: string; code: string };
-				}>,
-				RegisterState
-			>(`${url}/user/sign-up`, credentials),
+		register: (state: { phone: string }) =>
+			axios.post(`${url}/user/sign-up`, state),
 		verify: (credentials: { code: string; phone: string }, token: string) =>
 			axios.post(`${url}/user/send-code`, credentials, {
 				headers: { Authorization: `Bearer ${token}` },
 			}),
 		forgetPassword: (carcredentials: { phone: any }) =>
 			axios.post(`${url}/user/recover-password`, carcredentials),
-		resedSms: (code: any) =>
-			axios.post<any>(`${url}/user/accept-recover-code`, code),
+		resedSms: (credentials: { phone: string; code: string }) =>
+			axios.post(`${url}/user/accept-recover-code`, credentials),
 	},
-	btc: {
-		// getBTCRegions: () =>
-		// 	axios.get(`https://api.bts.uz/index.php?r=directory/regions`, {
-		// 		headers: { Authorization: `Bearer ${tokenBTC}` },
-		// 	}),
-		// getBTCCities: (id: any) =>
-		// 	axios.get(
-		// 		`https://api.bts.uz/index.php?r=directory/cities&regionId=${id}`,
-		// 		configBTC
-		// 	),
-		// postCalculateBtc: (params: any) =>
-		// 	axios.post(
-		// 		"https://api.bts.uz/index.php?r=v1/order/calculate",
-		// 		packageData(params),
-		// 		configBTC
-		// 	),
-		// postSendBTC: (params: any) =>
-		// 	axios.post(
-		// 		`http://api.bts.uz:8080/index.php?r=v1/order/add`,
-		// 		packageData(params),
-		// 		configBTC
-		// 	),
-	},
+
 	profile: {
 		getProfile: () => axios.get<{ data: LoginResponse }>(`${url}/user/profile`),
 		editProfile: (data: Partial<LoginResponse>) =>

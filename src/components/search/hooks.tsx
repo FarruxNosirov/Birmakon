@@ -1,25 +1,27 @@
 import requests from "@novomarkt/api/requests";
 import { ProductItemResponse } from "@novomarkt/api/types";
-import { selectQuery } from "@novomarkt/store/slices/appSettings";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import _, { debounce } from "lodash";
+
+import { useEffect, useState, useCallback } from "react";
 
 export const useSearchHook = () => {
 	let [result, setResult] = useState<ProductItemResponse[]>([]);
 	const [state, setState] = useState({
 		text: "",
 	});
-	// const query = useSelector(selectQuery);
+	const [loading, setLoading] = useState(false);
 
-	const searchWithQuery = async () => {
+	const searchWithQuery = useCallback(async () => {
+		setLoading(true);
 		try {
 			let res = await requests.products.searchProducts(state.text);
+			console.log(JSON.stringify(res.data, null, 2));
 			setResult(res.data.data);
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setLoading(false);
 		}
-	};
+	}, [state.text]);
 
 	let onStateChange = (key: string) => (value: string) => {
 		setState({ ...state, [key]: value });
@@ -27,8 +29,7 @@ export const useSearchHook = () => {
 
 	useEffect(() => {
 		searchWithQuery();
-		debounce(() => searchWithQuery(), 500);
-	}, []);
+	}, [searchWithQuery]);
 
-	return { result, onStateChange };
+	return { result, onStateChange, loading };
 };

@@ -1,9 +1,10 @@
+import KeyboardAvoiding from "@novomarkt/components/KeyboardAvoidingView";
 import DefaultButton from "@novomarkt/components/general/DefaultButton";
 import DefaultInput from "@novomarkt/components/general/DefaultInput";
 import DefaultInputEye from "@novomarkt/components/general/DefaultInputEye";
 import { STRINGS } from "@novomarkt/locales/strings";
 import React from "react";
-import { Image, KeyboardAvoidingView, Platform, View } from "react-native";
+import { Image, View } from "react-native";
 import Text from "../../../components/general/Text";
 import useRegisterHook from "./hooks";
 import { styles } from "./style";
@@ -22,11 +23,7 @@ const RegisterView = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<KeyboardAvoidingView
-				style={styles.container}
-				behavior={Platform.OS === "ios" ? "padding" : "height"}
-				keyboardVerticalOffset={Platform.OS === "ios" ? 70 : 20}
-			>
+			<KeyboardAvoiding>
 				<View style={styles.container}>
 					<Image
 						style={{
@@ -87,7 +84,7 @@ const RegisterView = () => {
 						/>
 					</View>
 				</View>
-			</KeyboardAvoidingView>
+			</KeyboardAvoiding>
 		</View>
 	);
 };

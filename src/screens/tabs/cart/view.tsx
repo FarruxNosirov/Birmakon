@@ -1,10 +1,7 @@
-/* eslint-disable no-shadow */
 import DefaultButton from "@novomarkt/components/general/DefaultButton";
 import Text from "@novomarkt/components/general/Text";
 import BackHeader from "@novomarkt/components/navigation/BackHeader";
-import { ROUTES } from "@novomarkt/constants/routes";
 import { STRINGS } from "@novomarkt/locales/strings";
-import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import ChooseItemNum from "./components/ChooseItemNum";
@@ -13,10 +10,15 @@ import { styles } from "./style";
 import { useCartScreenHooks } from "./useCartScreenHooks";
 
 const CartView = () => {
-	let navigation = useNavigation();
-
-	let { onClearCart, cart, totalPrices, activeShop, setActiveShop, isEmpty } =
-		useCartScreenHooks();
+	let {
+		onClearCart,
+		cart,
+		totalPrices,
+		activeShop,
+		setActiveShop,
+		isEmpty,
+		onCheckoutHandler,
+	} = useCartScreenHooks();
 
 	if (cart?.length <= 0) {
 		return (
@@ -36,8 +38,8 @@ const CartView = () => {
 					<BackHeader name={STRINGS.cart} />
 				</View>
 				<View style={styles.cleanTavar}>
-					<TouchableOpacity onPress={onClearCart}>
-						<Text style={styles.text}>{STRINGS.emptyCart}</Text>
+					<TouchableOpacity onPress={onClearCart} style={styles.clearBtn}>
+						<Text style={styles.ClearText}>{STRINGS.emptyCart}</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -54,7 +56,7 @@ const CartView = () => {
 								<View style={styles.shopName}>
 									<TouchableOpacity
 										style={[
-											item.id === activeShop.id
+											item.id === activeShop?.id
 												? styles.btnstyleActive
 												: styles.btnstyleNoActive,
 										]}
@@ -81,14 +83,9 @@ const CartView = () => {
 			</ScrollView>
 			<OrderDetails total={totalPrices} />
 			<DefaultButton
-				onPress={() =>
-					//@ts-ignore
-					navigation.navigate(ROUTES.CHECKOUT, { item: activeShop })
-				}
+				onPress={() => onCheckoutHandler()}
 				text={STRINGS.continueOrdering}
 				containerStyle={[styles.button, styles.bottom]}
-				textStyle={styles.buttonTxt}
-				disabled={isEmpty}
 			/>
 			{/* <Spinner visible={loading} /> */}
 		</View>

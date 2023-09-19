@@ -13,8 +13,10 @@ const OrderDetails = ({ total }: any) => {
 				<View style={styles.rowFooter}>
 					<Text style={styles.footerTxt}>{STRINGS.totalPrice}</Text>
 					<Text style={styles.total}>
-						{total
-							.toLocaleString(undefined, {
+						{Number(total)
+							.toLocaleString("USD", {
+								style: "currency",
+								currency: "USD",
 								minimumFractionDigits: 0,
 								maximumFractionDigits: 0,
 							})
