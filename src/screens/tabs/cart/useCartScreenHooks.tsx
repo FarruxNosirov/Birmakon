@@ -25,6 +25,7 @@ export const useCartScreenHooks = () => {
 		try {
 			await requests.products.clearCart();
 			let cartGet = await requests.products.getCarts();
+			//@ts-ignore
 			dispatch(loadCart(cartGet.data.data));
 		} catch (error) {
 			console.log(error);
@@ -53,6 +54,21 @@ export const useCartScreenHooks = () => {
 
 	const [activeShop, setActiveShop] = useState({});
 	const isEmpty = Object.keys(activeShop).length === 0;
+	const onCheckoutHandler = () => {
+		if (isEmpty) {
+			Alert.alert("Ошибка", "вам нужно выбрать бренд");
+		} else {
+			navigation.navigate(ROUTES.CHECKOUT, { item: activeShop });
+		}
+	};
 
-	return { onClearCart, totalPrices, cart, setActiveShop, activeShop, isEmpty };
+	return {
+		onClearCart,
+		totalPrices,
+		cart,
+		setActiveShop,
+		activeShop,
+		isEmpty,
+		onCheckoutHandler,
+	};
 };

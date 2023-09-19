@@ -26,7 +26,7 @@ const HomeView = () => {
 			<ScrollView style={styles.scroll}>
 				<View style={styles.container}>
 					<Carousel
-						onSnapToItem={(index) => setActiveSlide(index)}
+						onSnapToItem={(index: any) => setActiveSlide(index)}
 						itemWidth={WINDOW_WIDTH}
 						windowSize={WINDOW_WIDTH}
 						sliderWidth={WINDOW_WIDTH}

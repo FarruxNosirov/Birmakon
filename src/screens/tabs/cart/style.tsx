@@ -61,6 +61,18 @@ export const styles = StyleSheet.create({
 	text: {
 		color: COLORS.black,
 		fontFamily: "800",
+		fontSize: 14,
+	},
+	clearBtn: {
+		borderWidth: 1,
+		padding: 10,
+		borderRadius: 10,
+		borderColor: COLORS.blue,
+	},
+	ClearText: {
+		color: COLORS.black,
+		fontFamily: "800",
+		fontSize: 16,
 	},
 	btnstyleNoActive: {
 		padding: 10,

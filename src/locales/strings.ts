@@ -118,6 +118,6 @@ export const STRINGS = new LocalizedStrings({
 		ExpirationMonth: "Месяц истечения",
 		FullName: "ФИО",
 		address: "адрес",
-		money: "₽",
+		money: "сум",
 	},
 });

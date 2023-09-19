@@ -37,11 +37,12 @@ const useVerificationHook = () => {
 	});
 
 	let resendCode = async () => {
-		setTimeLeft(40);
+		setTimeLeft(20);
 		if (validatePhoneNumber(state.phone)) {
 			try {
 				setLoading(true);
-				let res = await requests.auth.forgetPassword(route.params?.phone);
+				let res = await requests.auth.forgetPassword(state);
+				console.log("resd", JSON.stringify(res.data, null, 2));
 			} catch (error) {
 				console.log(error);
 			} finally {
@@ -51,20 +52,19 @@ const useVerificationHook = () => {
 	};
 
 	let onVerificate = async () => {
-		//validate phone matches +998 ** *** ** **
 		if (validatePhoneNumber(state.phone as string)) {
-			//send data to remote
 			try {
 				setLoading(true);
 				let res = await requests.auth.resedSms(state);
 				const data = res.data.data;
-				!!data &&
+				data &&
 					Alert.alert(
 						"Ogoxlatirish",
 						`Mufoqiyatli kodingiz ${data.password} ga uzgardi!`
 					);
 
-				!!data &&
+				data &&
+					//@ts-ignore
 					navigation.navigate(ROUTES.LOGIN as never, { data: res.data });
 				dispatch(userLoggedIn(res.data.date));
 			} catch (error) {
@@ -79,7 +79,7 @@ const useVerificationHook = () => {
 	let onStateChange = (key: string) => (value: string) => {
 		setState({ ...state, [key]: value });
 	};
-	// console.log(JSON.stringify(state, null, 2));
+
 	return {
 		timeLeft,
 		onChangePhoneNumber,

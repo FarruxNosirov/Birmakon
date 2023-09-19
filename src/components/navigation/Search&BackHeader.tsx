@@ -42,7 +42,6 @@ const SearchBackHeader = ({ autoFocus, onChange }: SearchProps) => {
 				/>
 				<SearchIcon fill={COLORS.whiteGray} />
 			</View>
-			{/* <DeliveryIcon fill={COLORS.whiteGray} /> */}
 		</View>
 	);
 };

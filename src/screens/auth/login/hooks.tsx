@@ -32,6 +32,7 @@ const useLoginHook = () => {
 			try {
 				setLoading(true);
 				let res = await requests.auth.login(state);
+				console.log(JSON.stringify(res.data, null, 2));
 				dispatch(userLoggedIn(res.data));
 				setError(!res.data);
 			} catch (error) {
