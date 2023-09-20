@@ -7,6 +7,11 @@ export const styles = StyleSheet.create({
 		backgroundColor: COLORS.white,
 		flexWrap: "wrap",
 	},
+	keybord: {
+		flexGrow: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
 
 	container2: {
 		marginHorizontal: 0,

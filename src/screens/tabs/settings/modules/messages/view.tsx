@@ -1,13 +1,11 @@
-import React from "react";
-import AdminView from "./components/adminView";
-import ShopView from "./components/shopView";
 import BackHeader from "@novomarkt/components/navigation/BackHeader";
-import { STRINGS } from "@novomarkt/locales/strings";
-import { styles } from "./style";
-import userView from "./components/userView";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { COLORS } from "@novomarkt/constants/colors";
+import { STRINGS } from "@novomarkt/locales/strings";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import React from "react";
 import ChatsView from "./chats/view";
+import AdminView from "./components/adminView";
+import { styles } from "./style";
 
 const Tab = createMaterialTopTabNavigator();
 function MessageView() {

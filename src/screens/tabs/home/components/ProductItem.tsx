@@ -52,6 +52,7 @@ const ProductItem = ({
 	const isFocused = useIsFocused();
 	let navigation = useNavigation();
 	const [inside, setInside] = useState<any[]>([]);
+	const [animate, setAnimate] = useState(false);
 	const productList = useMemo(() => {
 		return flatten(inside.map((user) => user?.cart));
 	}, [inside]);
@@ -62,8 +63,8 @@ const ProductItem = ({
 	);
 
 	const fav = useAppSelector(favoriteSelector);
+
 	let isFav = !!fav[id];
-	const [animate, setAnimate] = useState(false);
 
 	const fistReqest = useCallback(async () => {
 		try {
@@ -85,6 +86,7 @@ const ProductItem = ({
 					product_id: id,
 				});
 				let cartGet = await requests.products.getCarts();
+				//@ts-ignore
 				dispatch(loadCart(cartGet.data.data));
 				dispatch(toggleLoading(false));
 				setInside(cartGet.data.data);
@@ -98,14 +100,21 @@ const ProductItem = ({
 			try {
 				setAnimate(true);
 				dispatch(toggleLoading(true));
-				let res = await requests.products.addToCart({
+				const res = await requests.products.addToCart({
 					amount: 1,
 					product_id: id,
 				});
+				if (!res.data) {
+					Alert.alert(res?.message);
+				}
+
 				let cartRes = await requests.products.getCarts();
 				setInside(cartRes.data.data);
+				//@ts-ignore
 				dispatch(loadCart(cartRes.data.data));
 			} catch (error) {
+				console.log(JSON.stringify(error, null, 2));
+
 				Alert.alert(JSON.stringify(error, null, 4));
 			} finally {
 				setAnimate(false);
@@ -175,7 +184,6 @@ const ProductItem = ({
 									? category?.name?.slice(0, 20) + ".."
 									: category?.name}
 							</Text>
-							{/* <Text style={styles.brand}>{shop?.name}</Text> */}
 						</View>
 						<Text style={styles.name}>
 							{name.length > 30 ? name.slice(0, 30) + "..." : name}

@@ -5,6 +5,11 @@ export const styles = StyleSheet.create({
 	txt: {
 		fontWeight: "bold",
 	},
+	scrolContainer: {
+		flexGrow: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
 
 	inputStyle: {
 		paddingVertical: Platform.OS == "android" ? 10 : 15,
