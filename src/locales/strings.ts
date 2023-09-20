@@ -113,6 +113,7 @@ export const STRINGS = new LocalizedStrings({
 		cardNumber: "Номер карты",
 		emptyCart: "Очистить корзину",
 		cartIsEmpty: "Корзина пустая",
+		paymentEmpty: "Платежи пустая",
 		favoritesIsEmpty: "Нет избранных товаров",
 		COURSE: "Курс",
 		ExpirationMonth: "Месяц истечения",

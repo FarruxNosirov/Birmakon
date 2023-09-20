@@ -1,24 +1,32 @@
-import requests from "@novomarkt/api/requests";
 import { COLORS } from "@novomarkt/constants/colors";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
-	StyleSheet,
-	View,
-	Text,
 	GestureResponderEvent,
-	ScrollView,
 	Image,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
 } from "react-native";
 
+import { STRINGS } from "@novomarkt/locales/strings";
 import MyPaymentsHooks from "./hooks";
 
 export interface BlueButtonProps {
 	onPress?: (event: GestureResponderEvent) => void;
 }
 
-const Mypayments = ({ onPress }: BlueButtonProps) => {
+const Mypayments = () => {
 	const { payments, state } = MyPaymentsHooks();
-
+	if (payments?.length > 0) {
+		return (
+			<View style={styles.empty}>
+				<View style={styles.emptyBox}>
+					<Text style={styles.emptyText}>{STRINGS.paymentEmpty}</Text>
+				</View>
+			</View>
+		);
+	}
 	return (
 		<View>
 			<ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -117,5 +125,18 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		paddingLeft: 30,
 		color: COLORS.defaultBlack,
+	},
+	empty: {
+		flex: 1,
+		backgroundColor: COLORS.white,
+	},
+	emptyBox: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+
+	emptyText: {
+		fontSize: 22,
 	},
 });

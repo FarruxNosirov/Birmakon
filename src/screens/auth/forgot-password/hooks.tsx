@@ -24,7 +24,7 @@ export const ResendHook = () => {
 			try {
 				setLoading(true);
 				let res = await requests.auth.forgetPassword(state);
-				console.log("Data===", JSON.stringify(res, null, 2));
+				console.log("Data===", JSON.stringify(res.data, null, 2));
 				dispatch(userLoggedIn(res));
 				navigition.navigate(ROUTES.VERIFICATION as never, {
 					phone: state.phone,
