@@ -44,4 +44,5 @@ export const ROUTES = {
 	CHATPRODUCTS: "ChatProducts",
 	BrendAll: "BrendAll",
 	ShopProducts: "ShopProducts",
+	FullScreen: "FullScreen",
 };

@@ -20,8 +20,8 @@ const useLoginHook = () => {
 	let dispatch = useAppDispatch();
 
 	const [state, setState] = useState<LoginState>({
-		phone: "",
-		password: "",
+		phone: "+998901951625",
+		password: "565189",
 	});
 	let onStateChange = (key: string) => (value: string) => {
 		setState({ ...state, [key]: value });

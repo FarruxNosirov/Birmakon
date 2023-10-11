@@ -12,6 +12,7 @@ import ReviewsAll from "./modulus/product-details/components/ReviewsAll";
 import ProductDetailsView from "./modulus/product-details/view";
 import HomeView from "./view";
 import ShopProducts from "./components/shops/shopProducts/ShopProducts";
+import FullScreen from "@novomarkt/components/FullScreen/FullScreen";
 
 let Stack = createNativeStackNavigator();
 
@@ -35,6 +36,7 @@ export let HomeStack = () => {
 			<Stack.Screen name={ROUTES.SHOPVIEW} component={ShopView} />
 			<Stack.Screen name={ROUTES.REVIEWSALL} component={ReviewsAll} />
 			<Stack.Screen name={ROUTES.BrendAll} component={BrendAll} />
+			<Stack.Screen name={ROUTES.FullScreen} component={FullScreen} />
 		</Stack.Navigator>
 	);
 };

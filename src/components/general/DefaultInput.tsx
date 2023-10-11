@@ -76,6 +76,8 @@ const styles = StyleSheet.create({
 		fontFamily: "Montserrat-Medium",
 		color: COLORS.defaultBlack,
 		paddingHorizontal: 9,
+		height: 40,
+		paddingVertical: 6,
 	},
 	container: {
 		alignSelf: "center",

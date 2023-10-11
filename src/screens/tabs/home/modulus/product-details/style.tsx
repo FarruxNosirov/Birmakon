@@ -265,6 +265,7 @@ export const styles = StyleSheet.create({
 		borderRadius: 5,
 	},
 	carousel: {
+		position: "relative",
 		paddingTop: 12,
 		minHeight: 300,
 	},
@@ -629,5 +630,10 @@ export const styles = StyleSheet.create({
 		textAlign: "center",
 		color: COLORS.red,
 		marginTop: 100,
+	},
+	fullScreen: {
+		position: "absolute",
+		bottom: 80,
+		right: 20,
 	},
 });

@@ -1,8 +1,11 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-shadow */
 /* eslint-disable quotes */
 import requests from "@novomarkt/api/requests";
 import { SendReviewProps } from "@novomarkt/api/types";
 import {
 	BasketIcon,
+	FullScreenIcon,
 	MinusIcon,
 	PlusCounterIcon,
 	RightArrow,
@@ -19,7 +22,7 @@ import { useAppSelector } from "@novomarkt/store/hooks";
 import { toggleLoading } from "@novomarkt/store/slices/appSettings";
 import { cartArraySelector, loadCart } from "@novomarkt/store/slices/cartSlice";
 import { useNavigation, useRoute } from "@react-navigation/core";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
 	Alert,
 	FlatList,
@@ -28,18 +31,18 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
 import ReactNativeModal from "react-native-modal";
 import { Rating } from "react-native-ratings";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { useDispatch } from "react-redux";
-import ProductsList from "../../components/ProductsList";
+import ProductItem from "../../components/ProductItem";
 import BackHeaderLimit from "./components/BackHeaderLimit";
 import CustomCarouselItem from "./components/CustomCarouselItem";
 import ReviewBox from "./components/ReviewBox";
 import FavoritePrice from "./components/favoritePrice";
 import { styles } from "./style";
-import ProductItem from "../../components/ProductItem";
-import Spinner from "react-native-loading-spinner-overlay";
+import { find, flatten } from "lodash";
 
 const ProductDetailsView = () => {
 	let {
@@ -69,9 +72,18 @@ const ProductDetailsView = () => {
 		review: "",
 	});
 	const cart = useAppSelector(cartArraySelector);
-	const isActive =
-		cart.filter((i) => i?.product?.id === newId).length > 0 ? true : false;
 
+	const productList = useMemo(() => {
+		return flatten(cart.map((user) => user?.cart));
+	}, [cart]);
+
+	let isInCart = useMemo(
+		() => find(productList, { product: { id } }),
+		[id, productList]
+	);
+	console.log(JSON.stringify(isInCart, null, 2));
+
+	const isActive = isInCart.product.id === newId ? true : false;
 	let onStateChange = (key: string) => (value: string) => {
 		setReview((e) => ({ ...e, [key]: value }));
 	};
@@ -90,7 +102,6 @@ const ProductDetailsView = () => {
 	const dispatch = useDispatch();
 	let navigation: any = useNavigation();
 
-	const [animate, setAnimate] = useState(false);
 	const [adValue, setAdValue] = useState(0);
 
 	const relatedProducts = useCallback(async () => {
@@ -103,7 +114,6 @@ const ProductDetailsView = () => {
 	}, [newId]);
 
 	const adHandler = (a: string) => {
-		// eslint-disable-next-line quotes
 		if (a === "add") {
 			setAdValue((c) => c + 1);
 		} else {
@@ -118,21 +128,22 @@ const ProductDetailsView = () => {
 	const onCartPress = async () => {
 		if (isActive) {
 			try {
-				setAnimate(true);
-				let clear = await requests.products.removeItem({
+				setLoading(true);
+				await requests.products.removeItem({
 					product_id: newId,
 				});
 				let cartGet = await requests.products.getCarts();
+				//@ts-ignore
 				dispatch(loadCart(cartGet.data.data));
-				setAnimate(false);
+				setLoading(false);
 				setAdValue(0);
 			} catch (error) {
 				console.log(error);
-				setAnimate(false);
+				setLoading(false);
 			}
 		} else {
 			try {
-				setAnimate(true);
+				setLoading(true);
 				let res = await requests.products.addToCart({
 					amount: adValue,
 					product_id: newId,
@@ -141,22 +152,24 @@ const ProductDetailsView = () => {
 					Alert.alert("Кол-во товара на складе меньше чем вы указали");
 				}
 				let cartRes = await requests.products.getCarts();
+				//@ts-ignore
 				dispatch(loadCart(cartRes.data.data));
-				setAnimate(false);
+				setLoading(false);
 			} catch (error) {
 				Alert.alert("Кол-во товара на складе меньше чем вы указали");
 			} finally {
-				setAnimate(false);
+				setLoading(false);
 			}
 		}
 	};
 	const onDecreaseItem = async () => {
 		try {
 			dispatch(toggleLoading(true));
-			let res = await requests.products.decreaseItem({
+			await requests.products.decreaseItem({
 				product_id: newId,
 			});
 			let cartRes = await requests.products.getCarts();
+			//@ts-ignore
 			dispatch(loadCart(cartRes.data.data));
 		} catch (error) {
 			console.log(error);
@@ -167,11 +180,12 @@ const ProductDetailsView = () => {
 	const onAddItem = async () => {
 		try {
 			dispatch(toggleLoading(true));
-			let res = await requests.products.increaseItem({
+			await requests.products.increaseItem({
 				amount: 1,
 				product_id: newId,
 			});
 			let cartRes = await requests.products.getCarts();
+			//@ts-ignore
 			dispatch(loadCart(cartRes.data.data));
 		} catch (error) {
 			console.log(error);
@@ -267,12 +281,19 @@ const ProductDetailsView = () => {
 	const onPress2 = () => {
 		setActive({ ...active, value2: !active.value2 });
 	};
-	// console.log("detailIdValue", JSON.stringify(detailIdValue, null, 2));
+	const onImageNavigation = () => {
+		//@ts-ignore
+		navigation.navigate(ROUTES.FullScreen as never, {
+			uri: detailIdValue.gallery,
+			dataType: "image",
+		});
+	};
 
 	return (
 		<View style={styles.container}>
 			<BackHeaderLimit name={item.name} id={id} detailIdValue={detailIdValue} />
 			{/* <Spinner visible={animate} /> */}
+
 			<ScrollView showsVerticalScrollIndicator={false} ref={flatlistRef}>
 				<View style={styles.otsenka}>
 					<Rating
@@ -301,6 +322,12 @@ const ProductDetailsView = () => {
 						renderItem={CustomCarouselItem}
 						pagingEnabled
 					/>
+					<TouchableOpacity
+						onPress={onImageNavigation}
+						style={styles.fullScreen}
+					>
+						<FullScreenIcon color={COLORS.red} />
+					</TouchableOpacity>
 					<Pagination
 						activeDotIndex={activeSlide}
 						dotsLength={
@@ -337,6 +364,7 @@ const ProductDetailsView = () => {
 											onPress={() => setColorActive(item.id)}
 											style={[
 												styles.buttonColor,
+
 												{
 													backgroundColor:
 														newId === item.id ? COLORS.blue : "#FFFFFF",
@@ -346,6 +374,7 @@ const ProductDetailsView = () => {
 											<Text
 												style={[
 													styles.active_title,
+
 													{
 														color: newId === item.id ? "#ffffff" : COLORS.blue,
 													},
@@ -380,6 +409,7 @@ const ProductDetailsView = () => {
 																onPress={() => setSizeActive(item.value_id)}
 																style={[
 																	styles.buttonSize,
+
 																	{
 																		backgroundColor:
 																			sizeActive === item.value_id
@@ -391,6 +421,7 @@ const ProductDetailsView = () => {
 																<Text
 																	style={[
 																		styles.active_title,
+
 																		{
 																			color:
 																				sizeActive === item.value_id

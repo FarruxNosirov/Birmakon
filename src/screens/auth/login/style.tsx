@@ -64,6 +64,7 @@ export const styles = StyleSheet.create({
 
 	input: {
 		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 
 	buttonTxt: {

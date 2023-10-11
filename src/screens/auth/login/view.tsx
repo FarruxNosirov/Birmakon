@@ -1,3 +1,4 @@
+import KeyboardAvoiding from "@novomarkt/components/KeyboardAvoidingView";
 import DefaultButton from "@novomarkt/components/general/DefaultButton";
 import DefaultInput from "@novomarkt/components/general/DefaultInput";
 import DefaultInputEye from "@novomarkt/components/general/DefaultInputEye";
@@ -5,18 +6,10 @@ import Text from "@novomarkt/components/general/Text";
 import { STRINGS } from "@novomarkt/locales/strings";
 import { toggleLoading } from "@novomarkt/store/slices/appSettings";
 import React, { useEffect } from "react";
-import {
-	Image,
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import useLoginHook from "./hooks";
 import { styles } from "./style";
-import KeyboardAvoiding from "@novomarkt/components/KeyboardAvoidingView";
 
 const LoginView = () => {
 	let {
